@@ -1,4 +1,20 @@
 {
     "background.enabled": true,
-    "background.useFront": true
+    "background.useFront": true,
+    "background.customImages": [
+        "file:///E:/c32f6bd0fdc63ab2c649c99128b9677b.gif",
+        "file:///E:/koro_sensei_by_ponderingchibi-d939npx.png"
+    ],
+    "background.useDefault": false,
+    "background.style": {
+        "content": "''",
+        "pointer-events": "none",
+        "position": "absolute",
+        "z-index": "99999",
+        "width": "100%",
+        "height": "100%",
+        "background-position": "100% 100%",
+        "background-repeat": "no-repeat",
+        "opacity": 0.5
+    }
 }

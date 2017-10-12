@@ -20,7 +20,8 @@
     <div class="col-lg-3"></div>
     <div class="col-lg-9">
         {!! Form::submit('Save', array('class' => 'btn btn-raised btn-primary')) !!}
-        {!! link_to(route('articles.index'), "Back", ['class' => 'btn btn-raised btn-info']) !!}
+            
+           <a href="{{ url()->previous() }}" class="btn btn-raised btn-info">Back </a> 
     </div>
     <div class="clear"></div>
 </div>
