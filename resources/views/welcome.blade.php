@@ -1,4 +1,4 @@
 @extends("layouts.application")
 @section("content")
-<h1>Never Stop Learn, Rocking \m/</h1>
+<h1> HALAMAN BRANCH</h1>
 @stop
