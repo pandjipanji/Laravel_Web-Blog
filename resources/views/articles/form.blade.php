@@ -21,6 +21,9 @@
     <div class="col-lg-9">
         {!! Form::submit('Save', array('class' => 'btn btn-raised btn-primary')) !!}
             
+           <!--{!! link_to( URL::previous(),"Back", ['class' => 'btn btn-raised btn-info']) !!}-->
+           <!--The Other Way-->
+           
            <a href="{{ url()->previous() }}" class="btn btn-raised btn-info">Back </a> 
     </div>
     <div class="clear"></div>

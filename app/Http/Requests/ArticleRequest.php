@@ -23,18 +23,17 @@ class ArticleRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->article;
         return [
-        'title' => 'required|unique:articles,title|max:255',
-        'content' => 'required|unique:articles,content|min:50'
+            'title' => 'required|unique:articles,title|max:255',
+            'content' => 'required|unique:articles,content|min:50'
         ];
     }
 
     public function messages()
     {
         return [
-        'title.required' => 'Title is required, at least fill a character',
-        'title.unique' => 'Title must unique, take another title'
+            'title.required' => 'Title is required, at least fill a character',
+            'title.unique' => 'Title must unique, take another title'
         ];
     }
 }

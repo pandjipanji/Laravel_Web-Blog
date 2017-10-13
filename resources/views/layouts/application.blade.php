@@ -22,11 +22,7 @@
 <!--bagian content -->
 <div class="container clearfix">
 	<div class="row row-offcanvas row-offcanvas-left">
-		<!--Bagian Kiri-->
-		@include("shared.left_nav")
-
-		<!--Bagian Kanan-->
-		<div id="main-content" class="col-xs-12 col-sm-9 main pull-right">
+		<div id="main-content" class="col-xs-12 col-sm-9 main">
 			<div class="panel-body">
 				@if(Session::has('error'))
 				<div class="alert alert-danger">
@@ -34,7 +30,7 @@
 				</div>
 				@endif
 				@if(Session::has('notice'))
-					<div class="alert alert-info">
+					<div class="alert alert-success">
 						{{Session::get('notice')}}
 					</div>
 				@endif

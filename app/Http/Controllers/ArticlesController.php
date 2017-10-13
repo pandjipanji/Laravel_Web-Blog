@@ -17,7 +17,10 @@ class ArticlesController extends Controller
     public function index()
     {
         $articles = Article::all();
-        return view('articles.index')->with('articles', $articles);
+        return view('articles.index')->with('articles',$articles); //CARA 1
+
+        //return view('articles.index', compact('articles'));  //CARA 2
+
     }
 
     /**
@@ -38,9 +41,16 @@ class ArticlesController extends Controller
      */
     public function store(ArticleRequest $request)
     {
-        Article::create($request->all());
-        Session::flash("notice","Article created succesfully");
-        return redirect()->route("articles.index");
+       $articles =  Article::create($request->all());
+        if ($articles) {
+            Session::flash("notice","Article created succesfully");
+            return redirect()->route("articles.index");
+        } else {
+            Session::flash("error","Failed to create!!");
+            return redirect()->route("articles.index");
+        }
+        
+        
     }
 
     /**
@@ -76,9 +86,16 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Article::find($id)->update($request->all());
-        Session::flash("notice","Article updated succesfully");
-        return redirect()->route('articles.show',$id);
+       $articles =  Article::find($id)->update($request->all());
+       if ($articles) {
+            Session::flash("notice","Article updated succesfully");
+            return redirect()->route('articles.show',$id);
+       } else {
+            Session::flash("error","Failed to update!!");
+            return redirect()->route('articles.show',$id);
+       }
+       
+        
     }
 
     /**
