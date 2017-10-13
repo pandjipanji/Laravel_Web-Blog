@@ -1,9 +1,10 @@
 @extends("layouts.application")
 @section("content")
-<h1> HALAMAN BRANCH
+<h1> LARAVEL
 
 <br>
+<br>
 
-MANTAABB
+HALAMAN BRANCH
 </h1>
 @stop
