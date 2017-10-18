@@ -20,6 +20,14 @@ Route::resource('comments','CommentsController');
 Route::get('img/{id}','ArticlesController@show_img')->name('show_img');
 Route::put('change/{id}','ArticlesController@update_img')->name('change_img');
 Route::delete('delete/{id}','ArticlesController@delete_img')->name('delete_img');
+
+Route::get('signup', 'UsersController@signup')->name('signup');
+Route::post('signup', 'UsersController@signup_store')->name('signup.store');
+
+Route::get('login', 'SessionsController@login')->name('login');
+Route::post('login', 'SessionsController@login_store')->name('login.store');
+Route::get('logout', 'SessionsController@logout')->name('logout');
+
 //Route::get('/profile', 'StaticsController@profile');
 //Route::post('/login', 'SessionsController@login');
 //Route::put('/password-reset/{id}',

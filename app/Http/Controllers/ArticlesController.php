@@ -10,6 +10,9 @@ use File;
 
 class ArticlesController extends Controller
 {
+    public function __construct(){
+        $this->middleware('sentinel');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -56,10 +59,10 @@ class ArticlesController extends Controller
             ]);
        }
         if ($articles) {
-            Session::flash("notice_create","");
+            Session::flash("notice","Article Created Succesfully");
             return redirect()->route("articles.index");
         } else {
-            Session::flash("error","Failed to create!!");
+            Session::flash("error","Failed to create Article!!");
             return redirect()->route("articles.index");
         }
         
@@ -112,7 +115,7 @@ class ArticlesController extends Controller
     {
        $articles =  Article::find($id)->update($request->all());
        if ($articles) {
-            Session::flash("notice_update","");
+            Session::flash("notice","Article Updated!!");
             return redirect()->route('articles.show',$id);
        } else {
             Session::flash("error","Failed to update!!");
@@ -140,7 +143,7 @@ class ArticlesController extends Controller
             }
 
             Article::destroy($id);
-            Session::flash("notice_delete","");
+            Session::flash("notice","Article Deleted");
             return redirect()->route('articles.index');
         }
         catch(\Exception $e) {
@@ -169,7 +172,7 @@ class ArticlesController extends Controller
                  'image' => $destination_path.$name
              ]);
         if ($update) {
-            Session::flash("notice_update_img","");
+            Session::flash("notice","Image Updated");
             return redirect()->route('articles.show',$img->article_id);
        } else {
             Session::flash("error","Failed to update image!!");
@@ -185,7 +188,7 @@ class ArticlesController extends Controller
         try{
             File::delete($img_data->image);//deleting the image
             Image::destroy($id);
-            Session::flash("notice_delete_img","");
+            Session::flash("notice","Image Deleted");
             return redirect()->route('articles.show',$img_data->article_id);
         }
         catch(\Exception $e){

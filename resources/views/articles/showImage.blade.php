@@ -7,7 +7,7 @@
                     </div>
         {!! Form::open(['route' => ['change_img', $img->id], 'method' => 'put', 'class' => 'form-horizontal', 'role' =>'form', 'enctype' => 'multipart/form-data']) !!}        
                     <div class="panel-body">
-                        <div class="col-sm-offset-2 col-sm-10" style="padding: 15px;">
+                        <div class="col-sm-offset-2 col-sm-8" style="padding: 15px;">
                             <img src="{{asset($img->image)}}" alt="" class="img-responsive">                                      
                         </div>
                         <div class="form-group">

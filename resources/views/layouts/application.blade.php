@@ -25,31 +25,6 @@
 	<div class="row row-offcanvas">
 		<div id="main-content" class="col-xs-12 col-sm-12 main">
 			<div class="panel-body">
-				@if(Session::has('error'))
-				<div class="alert alert-danger">
-					{{Session::get('error')}}
-				</div>
-				@endif
-				@if(Session::has('notice_create'))
-					<div id="toast_create" class="alert alert-success hidden">
-					</div>
-				@endif
-				@if(Session::has('notice_update'))
-					<div id="toast_update" class="alert alert-success hidden">
-					</div>
-				@endif
-				@if(Session::has('notice_delete'))
-					<div id="toast_delete" class="alert alert-success hidden">
-					</div>
-				@endif
-				@if(Session::has('notice_update_img'))
-					<div id="toast_img_update" class="alert alert-success hidden">
-					</div>
-				@endif
-				@if(Session::has('notice_delete_img'))
-					<div id="toast_img_delete" class="alert alert-success hidden">
-					</div>
-				@endif
 				@if(count($errors) > 0)
 					<div class="alert alert-danger">
 					@foreach($errors->all() as $message)
@@ -89,26 +64,25 @@
 	$(document).ready(function() {
 		//load toast when page loaded
 		//toastr.info('loaded');
-			if ($('#toast_create').length == 1) {
-				toastr.success('New article Created');
-			}
 
-			if ($('#toast_update').length == 1) {
-				toastr.success('Article Updated!!');
-			}
+			
+			@if (Session::has('notice'))
+				toastr.success("{{Session::get('notice')}}");
+			@endif
 
-			if ($('#toast_delete').length == 1) {
-				toastr.success('Deleted Succesfully!!');
-			}
+			
+			@if (Session::has('error'))
+				toastr.error("{{Session::get('error')}}");
+			@endif
 
-			if ($('#toast_img_update').length == 1) {
-				toastr.success('Image Updated Succesfully!!');
-			}
-
-			if ($('#toast_img_delete').length == 1) {
-				toastr.success('Image Deleted Succesfully!!');
-			}
-
+			
+			@if (Session::has('warning'))
+				toastr.options.positionClass = 'toast-bottom-full-width';
+				toastr.warning("{{Session::get('warning')}}");
+			@endif
+			
+			
+			
 		});
 </script>
 </body>
