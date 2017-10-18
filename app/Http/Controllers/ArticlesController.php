@@ -56,7 +56,7 @@ class ArticlesController extends Controller
             ]);
        }
         if ($articles) {
-            Session::flash("notice","Article created succesfully");
+            Session::flash("notice_create","");
             return redirect()->route("articles.index");
         } else {
             Session::flash("error","Failed to create!!");
@@ -112,7 +112,7 @@ class ArticlesController extends Controller
     {
        $articles =  Article::find($id)->update($request->all());
        if ($articles) {
-            Session::flash("notice","Article updated succesfully");
+            Session::flash("notice_update","");
             return redirect()->route('articles.show',$id);
        } else {
             Session::flash("error","Failed to update!!");
@@ -140,7 +140,7 @@ class ArticlesController extends Controller
             }
 
             Article::destroy($id);
-            Session::flash("notice","Article deleted succesfully");
+            Session::flash("notice_delete","");
             return redirect()->route('articles.index');
         }
         catch(\Exception $e) {
@@ -156,5 +156,40 @@ class ArticlesController extends Controller
         
         $img = Image::find($id);
         return view('articles.showImage')->with('img',$img);
+    }
+
+    public function update_img(Request $request, $id)
+    {
+        $img =  Image::find($id);
+            File::delete($img->image);//deleting the image first
+        $destination_path = "uploads/";
+        $name = str_random(6).'_'.$request->image->getClientOriginalName();
+        $request->image->move($destination_path,$name);
+        $update = Image::find($id)->update([
+                 'image' => $destination_path.$name
+             ]);
+        if ($update) {
+            Session::flash("notice_update_img","");
+            return redirect()->route('articles.show',$img->article_id);
+       } else {
+            Session::flash("error","Failed to update image!!");
+            return redirect()->route('articles.show',$img_article_id);
+       }
+        
+    }
+
+    public function delete_img($id)
+    {
+        $img_data = Image::find($id);
+
+        try{
+            File::delete($img_data->image);//deleting the image
+            Image::destroy($id);
+            Session::flash("notice_delete_img","");
+            return redirect()->route('articles.show',$img_data->article_id);
+        }
+        catch(\Exception $e){
+            return redirect()->route('articles.show',$img_data->article_id);
+        }
     }
 }

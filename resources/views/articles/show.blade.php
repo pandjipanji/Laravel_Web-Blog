@@ -1,8 +1,9 @@
 @extends("layouts.application")
 @section("content")
-    <article class="row">
-        <h2><i>{!! $article->title !!}</i></h2>
-        <div>{!! $article->content !!}</div>
+    <article class="row" style="background-color:rgb(255, 255, 255); padding-left: 20px; padding-right: 20px; padding-bottom: 20px; border-radius: 2px;">
+            <h2><i>{!! $article->title !!}</i></h2>
+            <div>{!! $article->content !!}</div>
+    
         <hr>
         @if(!empty($images))
             <div class="row text-center">
@@ -16,34 +17,40 @@
                         <img src="{{asset($image->image)}}" alt="" class=img-responsive style"height:250px;">
                     </div>
                     <div class="panel-footer clearfix">
-                {!! link_to_route('show_img', "Edit",$image->id, ['class' => 'btn btn-raised btn-info pull-right']) !!}
+                {!! link_to_route('show_img', "Edit",$image->id, ['class' => 'btn btn-sm btn-raised btn-info pull-right']) !!}
+
+                {!! Form::open(array('route' => array('delete_img', $image->id), 'method' => 'delete')) !!}
+                
+                {!! Form::submit('delete', ['class' =>'btn btn-sm btn-raised btn-danger pull-right', 'style' => 'margin-right: 10px;', 'onclick' => "return confirm('sure want to delete this image?')"]) !!}
+                
+                {!! Form::close() !!}
+                
                     
                     </div>
                 </div>
             </div> 
             @endforeach
         </div>
-        @endif
-        
-        
-        
+        @endif  
+        <div class="row">
+            {!! Form::open(array('route' => array('articles.destroy', $article->id), 'method' => 'delete')) !!}
+            
+                {!! link_to(route('articles.index'), "Back", ['class' => 'btn btn-raised btn-info']) !!}
+            
+                {!! link_to(route('articles.edit', $article->id), 'Edit Article', ['class' => 'btn btn-raised btn-success']) !!}
+            
+                {!! Form::submit('Delete', array('class' => 'btn btn-raised btn-danger', "onclick" => "return confirm('are you sure?')")) !!}
+            {!! Form::close() !!}
+        </div>
     </article>
-    <div class="row">
-    {!! Form::open(array('route' => array('articles.destroy', $article->id), 'method' => 'delete')) !!}
     
-        {!! link_to(route('articles.index'), "Back", ['class' => 'btn btn-raised btn-info']) !!}
-    
-        {!! link_to(route('articles.edit', $article->id), 'Edit Article', ['class' => 'btn btn-raised btn-success']) !!}
-    
-        {!! Form::submit('Delete', array('class' => 'btn btn-raised btn-danger', "onclick" => "return confirm('are you sure?')")) !!}
-    {!! Form::close() !!}
-    </div>
     
     <hr>
     
-    <h3><i>Give Comments</i></h3>
     
 <div class="row container-fluid" style="background-color: white; border-radius: 2px; padding-bottom: 15px;">
+    <h3><i>Give Comments</i></h3>
+
     {!! Form::open(['route' => 'comments.store', 'class' => 'form-horizontal', 'role' => 'form']) !!}
 
     <div class="form-group" style="margin-top: -10px;">
@@ -57,7 +64,7 @@
     <div class="form-group">
         {!! Form::label('content', 'Content', array('class' => 'col-lg-2 control-label')) !!}
         <div class="col-lg-9">
-            {!! Form::textarea('content', null, array('class' => 'form-control', 'rows' => 3, 'autofocus' => 'true')) !!}
+            {!! Form::textarea('content', null, array('class' => 'form-control', 'rows' => 3)) !!}
             <p class="text-danger">{!! $errors->first('content') !!}</p>
         </div>
         <div class="clear"></div>
@@ -94,3 +101,7 @@
     @endforeach
 </div>
 @stop
+
+@if(!empty($toast))
+    <div id="toast_update"></div>
+@endif

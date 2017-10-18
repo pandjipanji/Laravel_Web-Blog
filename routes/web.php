@@ -17,7 +17,9 @@ Route::get('/', function () {
 
 Route::resource('articles','ArticlesController');
 Route::resource('comments','CommentsController');
-Route::any('img/{id}','ArticlesController@show_img')->name('show_img');
+Route::get('img/{id}','ArticlesController@show_img')->name('show_img');
+Route::put('change/{id}','ArticlesController@update_img')->name('change_img');
+Route::delete('delete/{id}','ArticlesController@delete_img')->name('delete_img');
 //Route::get('/profile', 'StaticsController@profile');
 //Route::post('/login', 'SessionsController@login');
 //Route::put('/password-reset/{id}',
