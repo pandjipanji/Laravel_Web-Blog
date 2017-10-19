@@ -12,6 +12,7 @@ class ArticlesController extends Controller
 {
     public function __construct(){
         $this->middleware('sentinel');
+        $this->middleware('sentinel.role');
     }
     /**
      * Display a listing of the resource.
