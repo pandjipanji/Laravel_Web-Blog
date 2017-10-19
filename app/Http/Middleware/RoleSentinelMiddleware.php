@@ -21,8 +21,8 @@ class RoleSentinelMiddleware
         }elseif (Sentinel::getUser()->hasAccess('admin')) {
             return $next($request);
         } else {
-            Session::flash('error', 'You dont have privilage to do this');
-            return redirect('/');
+            Session::flash('error', 'You dont have privilage to do that');
+            return redirect('/articles');
         }
         
     }
