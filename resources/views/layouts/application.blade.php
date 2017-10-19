@@ -67,18 +67,19 @@
 
 			
 			@if (Session::has('notice'))
-				toastr.success("{{Session::get('notice')}}");
+				toastr.success("{{Session::get('notice')}}","Success");
 			@endif
 
 			
 			@if (Session::has('error'))
-				toastr.error("{{Session::get('error')}}");
+				toastr.error("{{Session::get('error')}}","Failed");
 			@endif
 
 			
 			@if (Session::has('warning'))
-				toastr.options.positionClass = 'toast-bottom-full-width';
-				toastr.warning("{{Session::get('warning')}}");
+				toastr.warning("{{Session::get('warning')}}","Warning",{
+					positionClass : 'toast-bottom-full-width'
+				});
 			@endif
 			
 			
