@@ -43,8 +43,7 @@ class AuthorizeSeeder extends Seeder
                 "articles.store" => true,
                 "articles.show" => true,
                 "articles.edit" => true,
-                "articles.update" => true,
-                "articles.delete_img" => true
+                "articles.update" => true
             ]
         ];
         

@@ -23,7 +23,8 @@ class ArticlesController extends Controller
 
     public function index()
     {
-        $articles = Article::all();
+        ///$articles = Article::all();
+        $articles = Article::paginate(4);
         return view('articles.index')->with('articles',$articles); //CARA 1
 
         //return view('articles.index', compact('articles'));  //CARA 2
@@ -49,24 +50,24 @@ class ArticlesController extends Controller
      */
     public function store(ArticleRequest $request)
     {
-       $articles =  Article::create($request->all());
-       $destination_path = "uploads/";
-       foreach ($request->image as $image) {
-           $name = str_random(6).'_'.$image->getClientOriginalName();
-           $image->move($destination_path,$name);
-            Image::create([
-                'article_id' => $articles->id,
-                'image' => $destination_path.$name
-            ]);
-       }
-        if ($articles) {
+
+        try{
+            $articles =  Article::create($request->all());
+            $destination_path = "uploads/";
+            foreach ($request->image as $image) {
+                $name = str_random(6).'_'.$image->getClientOriginalName();
+                $image->move($destination_path,$name);
+                 Image::create([
+                     'article_id' => $articles->id,
+                     'image' => $destination_path.$name
+                 ]);
+            }
             Session::flash("notice","Article Created Succesfully");
             return redirect()->route("articles.index");
-        } else {
+        } catch (\Exception $e) {
             Session::flash("error","Failed to create Article!!");
             return redirect()->route("articles.index");
         }
-        
         
     }
 

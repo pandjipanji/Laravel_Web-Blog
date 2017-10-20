@@ -7,3 +7,6 @@
     </p>
 </article>
 @endforeach
+<div>
+    {{ $articles->links() }}
+</div>

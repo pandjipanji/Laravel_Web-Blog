@@ -22,7 +22,7 @@ class RoleSentinelMiddleware
             return $next($request);
         } else {
             Session::flash('error', 'You dont have privilage to do that');
-            return redirect('/articles');
+            return redirect()->back();
         }
         
     }

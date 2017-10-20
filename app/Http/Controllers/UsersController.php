@@ -24,8 +24,13 @@ class UsersController extends Controller
         'first_name' => $request->first_name,
         'last_name' => $request->last_name
     ];
-    Sentinel::registerAndActivate($fill);
-    Session::flash('notice_register', '');
-    return redirect()->back();
+    
+    $default_user = Sentinel::registerAndActivate($fill);
+
+    $default_role = Sentinel::findRoleByName('Writer');   
+
+    $default_user->roles()->attach($default_role);    
+    Session::flash('notice', 'Successfuly Registered, Please login');
+    return redirect('/login');
     }
 }

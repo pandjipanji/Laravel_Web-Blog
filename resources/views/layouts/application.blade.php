@@ -25,13 +25,13 @@
 	<div class="row row-offcanvas">
 		<div id="main-content" class="col-xs-12 col-sm-12 main">
 			<div class="panel-body">
-				@if(count($errors) > 0)
+				<!--@if(count($errors) > 0)
 					<div class="alert alert-danger">
 					@foreach($errors->all() as $message)
 							{!! $message !!} <br>
 					@endforeach
 					</div>
-				@endif
+				@endif-->
 				@yield("content")
 			</div>
 		</div>
@@ -82,6 +82,15 @@
 				});
 			@endif
 			
+			
+			@if(count($errors) > 0)
+				toastr.error("@foreach($errors->all() as $message) {!! $message !!} <br> @endforeach","Failed",{
+					allowHtml : true,
+					positionClass : 'toast-bottom-full-width',
+					timeOut : '50000',
+					progressBar : false
+				});
+			@endif
 			
 			
 		});
