@@ -19,26 +19,37 @@ class CommentsController extends Controller
 
 
     public function store(Request $request) {
-        $new_comment = new Comment;
-        $new_comment->article_id = $request->article_id; 
-        $new_comment->content = $request->content; 
-        if ($request->user == "") {
-            $new_comment->user = Session::get('user_name'); 
-        } else {
-            $new_comment->user = $request->user; 
-            
-        }
+        //dd($request->article_id);
+        //$new_comment = new Comment;
+        //$new_comment->article_id = $request->article_id; 
+        //$new_comment->content = $request->content; 
+        //if ($request->user == "") {
+        //    $new_comment->user = Session::get('user_name'); 
+        //} else {
+        //    $new_comment->user = $request->user;  
+        //}
+        //$new_comment->save();
+        $comment_user = $request->user;
+        $comment_content = $request->content;
 
         $validate = Validator::make($request->all(), comment::valid());
         if ($validate->fails()) {
-            return Redirect::to('articles/'.$request->article_id)
-            ->withErrors($validate)
-            ->withInput();
+            $flash = "Fails, check your input!!";
+            $status = "Failed";
         } else {
-            $new_comment->save();
-            Session::flash('notice','Comment added succesfuly');
+            Comment::create($request->all());
+            $flash = "Comment added succesfuly";
+            $status = "Success";
+            //Session::flash('notice','Comment added succesfuly');
            // return Redirect::to('articles/'.$request->article_id);
-            return redirect()->route('articles.show',$request->article_id);
+            //return redirect()->route('articles.show',$request->article_id);
         }
+        return response()->json(['flash' => $flash, 'user' => $comment_user, 'content' => $comment_content, 'status' => $status]);
+
+        //$comments = Comment::where('article_id',$request->article_id)->orderBy('created_at','DESC')->get();
+        //dd($comments);
+        
+        //$view = (String) view('articles.ajax_comment')->with('comments', $comments);
+        //return view('articles.ajax_comment')->with('comments',$comments);
     }
 }

@@ -13,6 +13,7 @@ class Comment extends Model
 
     public static function valid() {
         return array(
+            'user' => 'required',
             'content' => 'required'
         );
     }

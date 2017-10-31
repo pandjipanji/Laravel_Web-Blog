@@ -49,22 +49,15 @@
     
     
 <div class="row container-fluid" style="background-color: white; border-radius: 2px; padding-bottom: 15px;">
+<div class="row">
+    <div class="col-lg-4">
     <h3><i>Give Comments</i></h3>
-
-    {!! Form::open(['route' => 'comments.store', 'class' => 'form-horizontal', 'role' => 'form']) !!}
-
-    <div class="form-group" style="margin-top: -10px;">
-        <!--{!! Form::label('article_id', 'Title', array('class' => 'col-lg-3 control-label')) !!}-->
-        <div class="col-lg-9">
-            {!! Form::hidden('article_id', $value = $article->id, array('class' => 'form-control', 'readonly')) !!}
-        </div>
-        <div class="clear"></div>
-    </div>
-
+    <!--{!! Form::open(['class' => 'form-horizontal', 'id' => 'form_comments']) !!}-->    
+            {!! Form::hidden('article_id', $value = $article->id, array('class' => 'form-control', 'id' => 'article_id' , 'readonly')) !!}
     <div class="form-group">
         {!! Form::label('content', 'Content', array('class' => 'col-lg-2 control-label')) !!}
         <div class="col-lg-9">
-            {!! Form::textarea('content', null, array('class' => 'form-control', 'rows' => 3)) !!}
+            {!! Form::textarea('content', null, array('class' => 'form-control', 'id' => 'content',  'rows' => 3)) !!}
             <p class="text-danger">{!! $errors->first('content') !!}</p>
         </div>
         <div class="clear"></div>
@@ -73,7 +66,7 @@
     <div class="form-group">
         {!! Form::label('user', 'User', array('class' => 'col-lg-2 control-label')) !!}
         <div class="col-lg-9">
-            {!! Form::text('user', null, array('class' => 'form-control')) !!}
+            {!! Form::text('user', null, array('class' => 'form-control', 'id' => 'user')) !!}
         <p class="text-danger">{!! $errors->first('user') !!}</p> 
         </div>
         <div class="clear"></div>
@@ -82,24 +75,31 @@
     <div class="form-group">
         <div class="col-lg-2"></div>
             <div class="col-lg-9">
-            {!! Form::submit('Save', array('class' => 'btn btn-raised btn-primary')) !!}
+                <button class ="btn btn-raised btn-primary" onclick="comments()">Submit</button>
             </div>
         <div class="clear"></div>
     </div>
-    {!! Form::close() !!}
-
+    <!--{!! Form::close() !!}-->
+    </div>
+    <div class="col-lg-8">
+            <h3>Comments</h3>
+            
+            <div class="row" id="comment_ajax">
+            
+                @foreach($comments as $comment)
+                    <div class="col-lg-11" style="margin:10px; padding-top:10px; background-color: #ebebeb; border-radius: 3px;">
+                        <strong><i>{!! $comment->user !!}</i></strong>
+                        <p>{!! $comment->content !!}</p>
+                    </div>
+                @endforeach
+                <div id="add_comment"></div>
+            </div>
+    </div>
+</div>
 </div>
 
 <hr style="background-color: rgb(124, 124, 124);">
-    <h3>Comments</h3>
-<div class="row">
-    @foreach($comments as $comment)
-        <div class="col-lg-9" style="margin:10px; padding-top:10px; background-color: white; border-radius: 3px;">
-            <strong><i>{!! $comment->user !!}</i></strong>
-            <p>{!! $comment->content !!}</p>
-        </div>
-    @endforeach
-</div>
+    
 @stop
 
 @if(!empty($toast))

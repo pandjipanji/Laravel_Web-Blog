@@ -4,17 +4,20 @@
     <meta charset=utf-8>
     <meta name=description content="">
     <meta name=viewport content="width=device-width, initial-scale=1">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<title>Laravel 5</title>
 	
 	<link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap-material-design.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('css/ripples.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('css/animate.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('css/toastr.css')}}">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<style>
-	body{
-		background-color: #ebebeb;
-		padding-top: 60px;
-	}
+		body{
+			background-color: #ebebeb;
+			padding-top: 60px;
+		}
 	</style>
 </head>
 <body>
@@ -29,10 +32,15 @@
 					<div class="alert alert-danger">
 					@foreach($errors->all() as $message)
 							{!! $message !!} <br>
-					@endforeach
+ 					@endforeach
 					</div>
 				@endif-->
-				@yield("content")
+				@yield('search_sort')
+				
+				<div id="data-content">
+					@yield('content')
+				</div>
+				<input id="direction" type="hidden" value="asc">
 			</div>
 		</div>
 	</div>
@@ -42,6 +50,11 @@
 <script src="{{asset('js/material.js')}}"></script>
 <script src="{{asset('js/ripples.js')}}"></script>
 <script src="{{asset('js/toastr.min.js')}}"></script>
+<script>
+	$.material.init();
+	$.material.checkbox();
+</script>
+
 <script>
 	toastr.options = {
 			"closeButton": true,
@@ -92,8 +105,163 @@
 				});
 			@endif
 			
-			
 		});
+</script>
+
+<!-- Handle ajax link in header menu-->
+<script>
+	$('#article_link').click(function(e){
+		e.preventDefault();
+		$.ajax({
+			url:'/articles',
+			type:"GET",
+			dataType: "json",
+			success: function (data)
+			{
+				$('#article-list').html(data['view']);
+			},
+			error: function (xhr, status)
+			{
+				console.log(xhr.error);
+			}
+		});
+	});
+</script>
+
+<!--Hande ajax pagination-->
+<script>
+	$(document).ready(function() {
+		$(document).on('click', '.pagination a', function(e) {
+			get_page($(this).attr('href').split('page=')[1]);
+			e.preventDefault();
+		});
+	});
+
+	function get_page(page) {
+		$.ajax({
+			url : '/articles?page=' + page,
+			type : 'GET',
+			dataType : 'json',
+			data : {
+				'keywords' : $('#keywords').val(),
+				'direction' : $('#direction').val()
+			},
+			success : function(data) {
+				$('#article-list').html(data['view']);
+				$('#keywords').val(data['keywords']);
+				$('#direction').val(data['direction']);
+			},
+			error : function(xhr, status, error) {
+				console.log(xhr.error + "\n ERROR STATUS : " + status + "\n" + error);
+			},
+			complete : function() {
+				alreadyloading = false;
+			}
+		});
+	}
+</script>
+
+<!--Handle ajax search-->
+<script>
+	$('#keywords').on('keyup', function(event){
+		$.ajax({
+			url : '/articles',
+			type : 'GET',
+			dataType : 'json',
+			data : {
+				'keywords' : $('#keywords').val(),
+				'direction' : $('#direction').val()
+			},
+			success : function(data) {
+				$('#article-list').html(data['view']);
+				$('#direction').val(data['direction']);
+			},
+			error : function(xhr, status) {
+				console.log(xhr.error + " ERROR STATUS : " + status);
+			},
+			complete : function() {
+				alreadyloading = false;
+			}
+		});
+	});
+</script>
+
+<!--Handle ajax sorting-->
+<script>
+	
+
+	
+		$('#id').on('click', function() {
+			$.ajax({
+				url : '/articles',
+				type : 'GET',
+				dataType : 'json',
+				data : {
+					'keywords' : $('#keywords').val(),
+					'direction' : $('#direction').val()
+				},
+				success : function(data) {
+					$('#article-list').html(data['view']);
+					$('#keywords').val(data['keywords']);
+					$('#direction').val(data['direction']);
+
+					if(data['direction'] == 'asc') {
+						$('i#ic-direction').attr({class: "fa fa-arrow-up"});
+					} else {
+						$('i#ic-direction').attr({class: "fa fa-arrow-down"});
+					}
+				},
+				error : function(xhr, status, error) {
+					console.log(xhr.error + "\n ERROR STATUS : " + status + "\n" + error);
+				},
+				complete : function() {
+					alreadyloading = false;
+				}
+			});
+		});
+</script>
+
+<script>
+		$.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+		
+	function comments(){
+		$.ajax({
+                type : "POST",
+                url : "/comments",
+				dataType : 'json',
+            	data:{
+                        'article_id' : $('#article_id').val(),
+						'content'	 : $('#content').val(),
+						'user'		 : $('#user').val()
+                },
+                success: function(success){
+						if (success['status'] == "Success") {
+							$('#content').val("");
+							$('#user').val("");
+							var tag_awal = '<div class="col-lg-11 animated slideInRight" style="margin:10px; padding-top:10px; background-color: #ebebeb; border-radius: 3px;">';
+							var user = '<strong><i>'+success['user']+'</i></strong>';
+							var content = '<p>'+success['content']+'</p>';
+							var tag_akhir = '</div>';	
+							$("#add_comment").append(tag_awal+user+content+tag_akhir);
+							toastr.success(success['flash'],success['status']);
+						} else {
+							toastr.error(success['flash'],success['status']);
+						}
+						
+                },
+                error : function(xhr, status, error) {
+					console.log(xhr.error + "\n ERROR STATUS : " + status + "\n" + error);
+				},
+				complete : function() {
+					alreadyloading = false;
+				}
+		});
+				
+	}
 </script>
 </body>
 </html>

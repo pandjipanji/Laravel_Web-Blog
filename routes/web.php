@@ -20,6 +20,8 @@ Route::resource('comments','CommentsController');
 Route::get('img/{id}','ArticlesController@show_img')->name('show_img');
 Route::put('change/{id}','ArticlesController@update_img')->name('change_img');
 Route::delete('delete/{id}','ArticlesController@delete_img')->name('delete_img');
+Route::get('export','ArticlesController@export_all')->name('export_xls');
+Route::post('import','ArticlesController@import')->name('import');
 
 Route::get('signup', 'UsersController@signup')->name('signup');
 Route::post('signup', 'UsersController@signup_store')->name('signup.store');
