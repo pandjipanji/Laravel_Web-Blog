@@ -9,6 +9,8 @@
 	
 	<link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap-material-design.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('css/dataTables.bootstrap.min.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('css/buttons.dataTables.min.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('css/ripples.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('css/animate.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('css/toastr.css')}}">
@@ -24,7 +26,7 @@
 <!--bagian navigation-->
 @include('shared.head_nav')
 <!--bagian content -->
-<div class="container clearfix">
+<div class="container-fluid clearfix">
 	<div class="row row-offcanvas">
 		<div id="main-content" class="col-xs-12 col-sm-12 main">
 			<div class="panel-body">
@@ -47,6 +49,10 @@
 </div>
 <script src="{{asset('js/jquery-3.2.1.min.js')}}"></script>
 <script src="{{asset('js/bootstrap.min.js')}}"></script>
+<script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('js/dataTables.bootstrap.min.js')}}"></script>
+<script src="{{asset('js/dataTables.buttons.min.js')}}"></script>
+<script src="/vendor/datatables/buttons.server-side.js"></script>
 <script src="{{asset('js/material.js')}}"></script>
 <script src="{{asset('js/ripples.js')}}"></script>
 <script src="{{asset('js/toastr.min.js')}}"></script>
@@ -75,8 +81,17 @@
 		  }
 
 	$(document).ready(function() {
-		//load toast when page loaded
-		//toastr.info('loaded');
+		$('#articles').DataTable({
+			"processing": true,
+			"serverSide": true,
+			"ajax": "{{ route('datatable') }}",
+			"columns": [
+				{data: 'id', name: 'id'},
+				{data: 'title', name: 'title'},
+				{data: 'content', name: 'content'},
+				{data: 'action', name: 'action', orderable: false, searchable: false}
+			]
+		});
 
 			
 			@if (Session::has('notice'))
@@ -106,6 +121,10 @@
 			@endif
 			
 		});
+
+		//function konfirmasi(){
+		//	if()confirm('Are you sure?');
+		//}
 </script>
 
 <!-- Handle ajax link in header menu-->

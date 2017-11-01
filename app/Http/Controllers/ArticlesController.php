@@ -9,6 +9,8 @@ use Session;
 use File;
 use Excel;
 use DB;
+use Datatables;
+use App\DataTables\ArticlesDataTable;
 use Illuminate\Support\Facades\Input;
 
 class ArticlesController extends Controller
@@ -306,5 +308,19 @@ class ArticlesController extends Controller
                 Session::flash('error','Fail to import');
                 return redirect()->route('articles.index');
             } 
+    }
+
+    public function datatable(){
+        $data = Article::all();
+        return Datatables::of($data)
+           ->editColumn('content', function($data){
+                return str_limit($data->content, 100);
+               })
+            ->editColumn('id', 'ID: {{$id}}')
+            ->addColumn('action', function($data){
+                return '<a href="'.route('articles.edit', $data->id).'" class="btn btn-xs btn-raised btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+            })
+            ->make(true);
+        //return $dataTable->render('articles.list');
     }
 }

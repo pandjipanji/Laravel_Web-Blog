@@ -22,6 +22,7 @@ Route::put('change/{id}','ArticlesController@update_img')->name('change_img');
 Route::delete('delete/{id}','ArticlesController@delete_img')->name('delete_img');
 Route::get('export','ArticlesController@export_all')->name('export_xls');
 Route::post('import','ArticlesController@import')->name('import');
+Route::get('datatable','ArticlesController@datatable')->name('datatable');
 
 Route::get('signup', 'UsersController@signup')->name('signup');
 Route::post('signup', 'UsersController@signup_store')->name('signup.store');
