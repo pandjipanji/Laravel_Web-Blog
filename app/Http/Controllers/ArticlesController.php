@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Input;
 class ArticlesController extends Controller
 {
     public function __construct(){
-        $this->middleware('sentinel');
-        $this->middleware('sentinel.role');
+        //$this->middleware('sentinel');
+        //$this->middleware('sentinel.role');
     }
     /**
      * Display a listing of the resource.
@@ -317,9 +317,10 @@ class ArticlesController extends Controller
                 return str_limit($data->content, 100);
                })
             ->editColumn('id', 'ID: {{$id}}')
-            ->addColumn('action', function($data){
-                return '<a href="'.route('articles.edit', $data->id).'" class="btn btn-xs btn-raised btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
-            })
+            ->addColumn('action','datatables.action') //via View
+            //->addColumn('action', function($data){
+            //    return '<a href="'.route('articles.edit', $data->id).'" class="btn btn-xs btn-raised btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+            //}) //MANUAL
             ->make(true);
         //return $dataTable->render('articles.list');
     }
