@@ -90,6 +90,10 @@
 				{data: 'title', name: 'title'},
 				{data: 'content', name: 'content'},
 				{data: 'action', name: 'action', orderable: false, searchable: false}
+			],
+			dom: 'Bfrtip',
+			buttons: [
+				'print','excel', 'pdf', 'reload'
 			]
 		});
 
@@ -280,6 +284,37 @@
 				}
 		});
 				
+	}
+</script>
+<script>
+	function deleteData(id){
+		var confirm_this = confirm('Sure to delete this data?');
+		//var dataId = $(this).attr('data-id');
+		var row = $('tr#'+id);
+		var table = $('#articles');
+
+		//alert(id);
+		 if (confirm_this == true) {
+		 	$.ajax({
+		 		url : '/deleteRow/' + id,
+		 		type : 'DELETE',
+		 		dataType : 'json',
+		 		success : function(success) {
+					row.addClass('animated slideOutLeft');
+					row.one("webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend",function(event) {
+						toastr.success(success['flash'],success['status']);
+		 				row.remove();
+					});//detects when the animation ends
+		 			
+		 		},
+		 		error : function(xhr, status, error) {
+		 			toastr.error(success['flash'],success['status']);
+		 		},
+		 		complete : function() {
+		 			alreadyloading = false;
+		 		}
+		 	});
+		 }
 	}
 </script>
 </body>

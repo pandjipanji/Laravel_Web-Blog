@@ -23,6 +23,7 @@ Route::delete('delete/{id}','ArticlesController@delete_img')->name('delete_img')
 Route::get('export','ArticlesController@export_all')->name('export_xls');
 Route::post('import','ArticlesController@import')->name('import');
 Route::get('datatable','ArticlesController@datatable')->name('datatable');
+Route::delete('deleteRow/{id}','ArticlesController@deleteRow');
 
 Route::get('signup', 'UsersController@signup')->name('signup');
 Route::post('signup', 'UsersController@signup_store')->name('signup.store');

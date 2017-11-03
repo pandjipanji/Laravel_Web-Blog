@@ -18,7 +18,7 @@
             <label class="col-lg-2" for="import">Import Article</label>
             <div class="col-lg-3">
                 {{ Form::file('import') }}
-                {{ Form::text('importText',null, ['class' => 'form-control', 'placeholder' => "File of type .xlsx only"]) }}
+                {{ Form::text('importText',null, ['class' => 'form-control', 'placeholder' => "Browse File"]) }}
             </div>
             <div class="col-lg-3">
                 

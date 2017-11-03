@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Article, App\Image;
 use App\Http\Requests\ArticleRequest;
+use App\Http\Requests\ExcelRequest;
 use Session;
 use File;
 use Excel;
@@ -16,8 +17,8 @@ use Illuminate\Support\Facades\Input;
 class ArticlesController extends Controller
 {
     public function __construct(){
-        //$this->middleware('sentinel');
-        //$this->middleware('sentinel.role');
+        $this->middleware('sentinel');
+        $this->middleware('sentinel.role');
     }
     /**
      * Display a listing of the resource.
@@ -276,12 +277,12 @@ class ArticlesController extends Controller
             })->export('xlsx');
     }
 
-    public function import(Request $request){
+    public function import(ExcelRequest $request){
         //$file = $request->import;
         //dd($file);
-        $this->validate($request,[
-            'import' => 'required|mimes:xlsx,xls',
-        ]);
+        //$this->validate($request,[
+        //   'import' => 'required|mimes:xlsx,xls,csv,ods',
+        //]);
         
         //$file_name = $request->import->getClientOriginalName();
         $file_name = Input::file('import')->getRealPath();
@@ -317,11 +318,42 @@ class ArticlesController extends Controller
                 return str_limit($data->content, 100);
                })
             ->editColumn('id', 'ID: {{$id}}')
+            ->editColumn('title','datatables.article_detail') //via view
             ->addColumn('action','datatables.action') //via View
+            ->setRowId('{{$id}}')
             //->addColumn('action', function($data){
             //    return '<a href="'.route('articles.edit', $data->id).'" class="btn btn-xs btn-raised btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
             //}) //MANUAL
             ->make(true);
         //return $dataTable->render('articles.list');
+    }
+
+    public function deleteRow($id)
+    {
+        try{
+            $img_data = Image::where('article_id',$id)->get();
+            if ($img_data != null) {
+                foreach ($img_data as $img) {
+                    File::delete($img->image);
+                }
+                Image::where('article_id',$id)->delete();
+            }
+
+            Article::destroy($id);
+            $flash = "Deleted Successfuly!!";
+            $status = "success";
+            return response()->json([
+                'flash' => $flash,
+                'status' => $status
+            ]);
+        }
+        catch(\Exception $e) {
+            $flash = "Failed to delete!!";
+            $status = "failed";
+            return response()->json([
+                'flash' => $flash,
+                'status' => $status
+            ]);
+        }
     }
 }
