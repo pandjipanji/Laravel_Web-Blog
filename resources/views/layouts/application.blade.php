@@ -300,7 +300,7 @@
 		 		type : 'DELETE',
 		 		dataType : 'json',
 		 		success : function(success) {
-					row.addClass('animated slideOutLeft');
+					row.addClass('animated slideOutRightg');
 					row.one("webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend",function(event) {
 						toastr.success(success['flash'],success['status']);
 		 				row.remove();
